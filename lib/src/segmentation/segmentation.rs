@@ -264,7 +264,7 @@ where
     ///
     /// Labels as an integer matrix.
     fn derive_labels(&self) -> Mat {
-        let labels = Mat::new_rows_cols_with_default(
+        let mut labels = Mat::new_rows_cols_with_default(
             self.height as i32,
             self.width as i32,
             CV_32SC1,
@@ -273,14 +273,13 @@ where
         .unwrap();
 
         for i in 0..self.height {
-            let mut row = labels.row(i as _).unwrap();
             for j in 0..self.width {
                 let n = self.width * i + j;
 
                 let index = self.graph.find_node_component_at(n);
                 let id = self.graph.node_id_at(index) as i32;
 
-                *(row.at_mut(j as _).unwrap()) = id;
+                *(labels.at_2d_mut::<i32>(i as _, j as _).unwrap()) = id;
             }
         }
 

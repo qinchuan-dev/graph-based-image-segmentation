@@ -82,6 +82,7 @@ fn blur_image(image: &Mat, sigma: f64, size: usize) -> opencv::Result<Mat> {
         sigma,
         sigma,
         BORDER_DEFAULT,
+        opencv::core::AlgorithmHint::ALGO_HINT_DEFAULT,
     )?;
     Ok(blurred)
 }
@@ -93,18 +94,17 @@ fn draw_contours(image: &Mat, labels: &Mat) -> opencv::Result<Mat> {
     assert_eq!(image.cols(), labels.cols());
     assert_eq!(labels.typ(), CV_32SC1);
 
-    let contours =
+    let mut contours =
         Mat::new_rows_cols_with_default(image.rows(), image.cols(), CV_8UC3, Scalar::all(0f64))?;
     let color = Vec3b::all(0); // black contours
 
     for i in 0..contours.rows() {
-        let mut c_row = contours.row(i)?;
         let i_row = image.row(i)?;
         for j in 0..contours.cols() {
             if is_4connected_boundary_pixel(&labels, i, j)? {
-                *(c_row.at_mut::<Vec3b>(j)?) = color;
+                *(contours.at_2d_mut::<Vec3b>(i, j).unwrap()) = color;
             } else {
-                *(c_row.at_mut::<Vec3b>(j)?) = *i_row.at::<Vec3b>(j)?;
+                *(contours.at_2d_mut::<Vec3b>(i, j).unwrap()) = *i_row.at::<Vec3b>(j)?;
             }
         }
     }

@@ -1,7 +1,7 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use graph_based_image_segmentation::{EuclideanRGB, NodeMergingThreshold, Segmentation};
 use opencv::{
-    core::{Size, BORDER_DEFAULT},
+    core::{Size, BORDER_DEFAULT, ALGO_HINT_DEFAULT},
     imgcodecs::{imdecode, IMREAD_COLOR},
     imgproc::gaussian_blur,
     prelude::*,
@@ -44,6 +44,7 @@ fn blur_image(image: &Mat, sigma: f64, size: usize) -> opencv::Result<Mat> {
         sigma,
         sigma,
         BORDER_DEFAULT,
+        opencv::core::AlgorithmHint::ALGO_HINT_DEFAULT,
     )?;
     Ok(blurred)
 }

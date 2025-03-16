@@ -11,12 +11,15 @@ keywords = ["graphics", "image-processing"]
 categories = ["computer-vision", "multimedia::images"]
 
 [dependencies]
-opencv = { version = "0.84.5", default-features = false, features = ["imgcodecs"] }
+opencv = { version = "0.94.2", default-features = false, features = ["imgcodecs"] }
 
 [dev-dependencies]
 criterion = "0.5.1"
-opencv = { version = "0.84.5", default-features = false, features = ["imgproc"] }
+opencv = { version = "0.94.2", default-features = false, features = ["imgproc"] }
 
 [[bench]]
 name = "performance"
 harness = false
+
+[features]
+measure=[]
